@@ -1,0 +1,23 @@
+#!/bin/bash
+
+TS3_VERSION_ENDPOINT="https://ts3v.kldzj.dev/latest"
+TS3_VERSION_LATEST=$(wget -qO- $TS3_VERSION_ENDPOINT)
+TS3_VERSION="${TS3_VERSION:-$TS3_VERSION_LATEST}"
+
+TS3_ARCHIVE_NAME="teamspeak3-server_linux_amd64-$TS3_VERSION.tar.bz2"
+TS3_DOWNLOAD_URL="https://files.teamspeak-services.com/releases/server/$TS3_VERSION/$TS3_ARCHIVE_NAME"
+
+# download archive
+if wget -q "$TS3_DOWNLOAD_URL"; then
+    # unpack archive
+    tar -xjf "$TS3_ARCHIVE_NAME"
+    mv teamspeak3-server_linux*/* .
+    rm -rf "$TS3_ARCHIVE_NAME" teamspeak3-server_linux*/
+
+    # accept teamspeak license and mark as installed
+    touch .ts3server_license_accepted
+    touch .installed
+else
+    echo -e "\n ERROR while downloading server archive from $TS3_DOWNLOAD_URL"
+    exit 1
+fi

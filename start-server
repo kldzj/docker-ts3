@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ ! -f ./.installed ]; then
+    /bin/sh ./get-server
+fi
+
+./ts3server_minimal_runscript.sh
